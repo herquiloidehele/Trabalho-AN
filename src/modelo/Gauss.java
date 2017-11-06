@@ -20,21 +20,44 @@ public class Gauss {
     
     private Vector<Vector<Double>> matrizA;
     private Vector<Double> matrizB;
-    private Vector<Double> multiplicadores;
+    private Vector<Double> multiplicadores = new Vector<>();
+    private int ordemMatriz;
     
     
-    private Map<String, Double> resultados;
+    private Map<String, Double> resultados = new HashMap<>();
     
     
-    /**
-     * imprime a matriz dada;
-     */
+
     public Gauss(Vector<Vector<Double>> matrizA, Vector<Double> matrizB){
         this.matrizA = matrizA;
         this.matrizB = matrizB;
-        this.resultados = new HashMap<>();
-        this.multiplicadores = new Vector<>();
     }
+    
+    
+    public Gauss(Vector<Double> matrizAsLista , Vector<Double> matrizB, int ordemMatriz){
+        
+        this.comporMatriz(matrizAsLista, matrizB, ordemMatriz);
+        this.imprimirMatriz();
+           
+    }
+    
+    
+    public void comporMatriz(Vector<Double> matrizAsLista , Vector<Double> matrizB, int ordemMatriz){
+       
+        this.matrizA = new Vector<>();
+        this.ordemMatriz = ordemMatriz;
+        this.matrizB = matrizB;
+        
+        int cont = 0;
+        for(int linha = 0; linha<ordemMatriz; linha++){
+            this.matrizA.add(new Vector<Double>());
+           for(int coluna = 0; coluna<ordemMatriz; coluna++){
+               this.matrizA.get(linha).add(matrizAsLista.get(cont++));
+           }
+        } 
+    }
+    
+    
     
     
     /**
@@ -102,7 +125,6 @@ public class Gauss {
                     matrizA.get(linha).set(coluna, matrizA.get(linha).get(coluna) - multiplicador*this.matrizA.get(linhaPivot).get(coluna));
                     
                 }
-                System.out.println(this.matrizB.get(linhaPivot));
                 matrizB.set(linha, matrizB.get(linha) - multiplicador*this.matrizB.get(linhaPivot));
             }
            colunaPivoteamento++;
@@ -113,45 +135,34 @@ public class Gauss {
     }
 
     
-    
-    public static void main(String[] args) {
-         Vector<Vector<Double>> matrizA = new Vector<Vector<Double>>();
-         Vector<Double> matrizB = new Vector<Double>(Arrays.asList(2.0, 1.0, 3.0));
-         
-         Scanner ler = new Scanner(System.in);
-         
-        int cont = 0;
-        
-         
-        for (int linha = 0; linha<3; linha++){
-            matrizA.add(new Vector<Double>());
-            for(int coluna = 0; coluna<3; coluna++){   
-                System.out.println("Introduza o A"+linha+""+coluna);
-                matrizA.get(linha).add((double)ler.nextDouble());
+    /**
+     * metodo que calcula o valor de cada x da equacao 
+     * atraves da retrosubstituicao
+     */
+    public void retrosubstituicao(){
+        for(int linha = this.matrizA.size()-1; linha>=0; linha--){
+            double resultLinha = this.matrizB.get(linha);
+
+            for(int coluna = this.matrizA.get(linha).size()-1; coluna>=0; coluna--){
+                
+                if(coluna>=linha){
+                    if(linha == coluna){
+                        this.resultados.put("X"+(linha+1), resultLinha/matrizA.get(linha).get(coluna));
+                        this.matrizB.set(linha, resultados.get("X"+(linha+1)));
+                        break;
+                    }
+                    else
+                    resultLinha = resultLinha - (matrizA.get(linha).get(coluna) * matrizB.get(coluna));
+                    
+                }
             }
             
         }
-         
-        Gauss gaus = new Gauss(matrizA, matrizB);
-        
-        gaus.imprimirMatriz();
-        System.out.println(" ");
-        System.out.println(" ");
-        System.out.println(" ");
-//        gaus.escalonarBaixo();
-//        gaus.escalonarCima();
-//        Vector<Double> pivos = gaus.getPivot();
-//        System.out.println("Pivos \n "+ gaus.getPivot());
-////
-//          System.out.println(gaus.getMultiplicador(2, 1, gaus.getPivot(1)));
-        gaus.escalonar();
-//        System.out.println("Matriz Escalonada");
-//        System.out.println("");
-//        System.out.println("");
-////
-        gaus.imprimirMatriz();
-        
     }
     
     
+    public Map<String,Double> getResultados(){
+        return this.resultados;
+    }
+
 }

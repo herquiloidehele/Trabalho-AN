@@ -5,6 +5,7 @@
  */
 package controle;
 
+import java.util.Map;
 import java.util.Vector;
 import modelo.Gauss;
 
@@ -55,5 +56,10 @@ public class Controller {
         return this.matrizA;
     }
     
+    
+    
+    public Map<String,Double> getResultados(){
+        return gauss.getResultados();
+    }
     
 }

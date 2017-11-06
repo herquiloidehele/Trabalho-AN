@@ -5,15 +5,18 @@
  */
 package visao;
 
-import controle.Controller;
+import apple.laf.JRSUIUtils;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Vector;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import modelo.Gauss;
 
 /**
  *
@@ -32,18 +35,19 @@ public class JanelaPrincipal extends javax.swing.JFrame {
     private ArrayList<JLabel> matrizBResutado = new ArrayList<>();
     private ArrayList<JLabel> igualdadesResultado = new ArrayList<>();
     
-    private int ordemMatriz = 2;
+    private int ordemMatriz = 3;
     
+    private Gauss gaus;
+    private ArrayList<JTextField> composNulos = new ArrayList<>();
     
     public JanelaPrincipal() {
         initComponents();
-        
         this.inicializarElementos();
      
     }
 
     public void adicionarMatrizA(){
-        Campo campo = new Campo("");
+        Campo campo = new Campo("0");
         this.jpMatrizA.add(campo);
         this.matrizA.add(campo);
     }
@@ -237,7 +241,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
     }
     
     
-    
+ 
     public void getMatrizA(){
         Vector<Double> elementosA = new Vector<>();
         Vector<Double> elementosB = new Vector<>();
@@ -250,19 +254,51 @@ public class JanelaPrincipal extends javax.swing.JFrame {
             elementosB.add(Double.parseDouble(((JTextField)elemento).getText()));
         }
         
-        Controller controler = new Controller(elementosA, elementosB, ordemMatriz);
+        gaus = new Gauss(elementosA, elementosB, ordemMatriz);
+        gaus.escalonar();
+        gaus.retrosubstituicao();
         
     }
     
     
+    public void setResultado(){
+        System.out.println(gaus.getResultados());
+        Map<String, Double> resultados = this.gaus.getResultados();
+        for(int i = 0; i< this.jpMatrizBResultado.getComponents().length; i++){
+           ((JLabel)this.jpMatrizBResultado.getComponents()[i]).setText(String.valueOf(resultados.get("X"+(i+1))));
+        }
+    }
     
     
     
+    public boolean validarCampos(){
+        boolean isValido = true;
+        for(Component elemento: this.jpMatrizA.getComponents()){
+            String valor = ((JTextField) elemento).getText().trim();
+            if(valor.equals("") || this.hasString(valor)){
+                ((JTextField) elemento).setBackground(Color.red);
+                isValido = false;
+            }else{
+              ((JTextField) elemento).setBackground(Color.white);
+            }
+        }
+        
+        for(Component elemento: this.jpMatrizB.getComponents()){
+            String valor = ((JTextField) elemento).getText().trim();
+            if(valor.equals("") || this.hasString(valor)){
+                ((JTextField) elemento).setBackground(Color.red);
+                isValido = false;
+            }else{
+              ((JTextField) elemento).setBackground(Color.white);
+            }
+        }
+        return isValido;      
+    }
+
     
-    
-    
-    
-    
+    public boolean hasString(String string){
+        return string.matches("[0-9]*[^0-9]+[0-9]*");
+    }
     
     
     
@@ -373,8 +409,8 @@ public class JanelaPrincipal extends javax.swing.JFrame {
                 .addGap(45, 45, 45)
                 .addComponent(jpIgualdadeResultado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jpMatrizBResultado, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(324, Short.MAX_VALUE))
+                .addComponent(jpMatrizBResultado, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(245, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -386,6 +422,10 @@ public class JanelaPrincipal extends javax.swing.JFrame {
                     .addComponent(jpMatrizAResultado, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(49, 49, 49))
         );
+
+        jPanel6.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(30, 144, 255)), "Ver Pass a Passo", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Lucida Grande", 0, 13), new java.awt.Color(30, 144, 255))); // NOI18N
+        jPanel6.setForeground(new java.awt.Color(255, 255, 255));
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -455,12 +495,10 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addGap(117, 117, 117)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jpEquacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -475,7 +513,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jpEquacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 65, Short.MAX_VALUE)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -498,7 +536,12 @@ public class JanelaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        this.getMatrizA();
+       
+        if(this.validarCampos()){
+            this.getMatrizA();
+            this.setResultado();   
+        }
+        
     }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
