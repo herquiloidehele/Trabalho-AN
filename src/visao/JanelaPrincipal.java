@@ -297,7 +297,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
 
     
     public boolean hasString(String string){
-        return string.matches("[0-9]*[^0-9]+[0-9]*");
+        return string.matches("[0-9]*[^0-9]+[0-9]*") && false;
     }
     
     
