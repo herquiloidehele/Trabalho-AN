@@ -5,7 +5,7 @@
  */
 package visao;
 
-import apple.laf.JRSUIUtils;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -17,6 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import modelo.Gauss;
+import org.jdesktop.swingx.JXCollapsiblePane;
 
 /**
  *
@@ -37,15 +38,100 @@ public class JanelaPrincipal extends javax.swing.JFrame {
     
     private int ordemMatriz = 3;
     
+    
+    
+    
+    //Trabalhando com Passo a passo
+    
+    private ArrayList<JLabel> matrizAPassoas = new ArrayList<>();
+    
+    
+    
+    
+    
+    
     private Gauss gaus;
     private ArrayList<JTextField> composNulos = new ArrayList<>();
     
     public JanelaPrincipal() {
         initComponents();
         this.inicializarElementos();
+        
+        jXCPassos.setLayout(new BorderLayout());
+        jXCPassos.add(jpPassos);
+         
+        jXCPassos.setSize(400, 240);
+        jXCPassos.setDirection(JXCollapsiblePane.Direction.UP);
+        jXCPassos.setCollapsed(true);
      
     }
+    
+    
+    public void addMatrizAPassos(){
+        ((GridLayout)jpMatrizAPassos.getLayout()).setColumns(this.ordemMatriz);
+            ((GridLayout)jpMatrizAPassos.getLayout()).setRows(this.ordemMatriz);
+        for(JTextField campo: matrizA){
+            JLabel label = new JLabel(campo.getText());
+            label.setFont(new Font("Arial", 1, 25));
+            this.jpMatrizAPassos.add(label);
+        }
+            
+    }
+    
+    
+    public void addMatrizBPassos(){
+            ((GridLayout)jpMatrizBPassos.getLayout()).setRows(this.ordemMatriz);
+        for(JTextField campo: matrizB){
+            JLabel label = new JLabel(campo.getText());
+            label.setFont(new Font("Arial", 1, 25));
+            this.jpMatrizBPassos.add(label);
+        }
+            
+    }
+    
+    
+    
+    public void addMatrizEscalonadaA(){
+        ((GridLayout)jpMatrizEscalonadaA.getLayout()).setColumns(this.ordemMatriz);
+            ((GridLayout)jpMatrizEscalonadaA.getLayout()).setRows(this.ordemMatriz);
+        
+            for(Vector<Double> linhas: gaus.passos.getMatrizEscalonadaA()){
+                for(Double valor : linhas){
+                    JLabel label = new JLabel(String.valueOf(valor));
+                    label.setFont(new Font("Arial", 1, 25));
+                    this.jpMatrizEscalonadaA.add(label);
+                }
+        }
+    }
+    
+    
+    public void addMatrizEscalonadaB(){
+            ((GridLayout)jpMatrizEscalonadaB.getLayout()).setRows(this.ordemMatriz);
+        for(Double campo: gaus.passos.getMatrizEscalonadaB()){
+            JLabel label = new JLabel(String.valueOf(campo));
+            label.setFont(new Font("Arial", 1, 25));
+            this.jpMatrizEscalonadaB.add(label);
+        }
+            
+    }
+    
+    
+    public void adicionarResultados(){
 
+        int cont = 1;
+        for(JLabel resultados: matrizBResutado){
+            JLabel result  = new JLabel("X"+(cont++) + " = "+ resultados.getText());
+            result.setBackground(Color.red);
+            result.setFont(new Font("Arial", 1, 25));
+
+            jpResultados.add(result);
+        }
+    }
+    
+    
+    
+
+    
     public void adicionarMatrizA(){
         Campo campo = new Campo("0");
         this.jpMatrizA.add(campo);
@@ -84,6 +170,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
     
     public void adicionarMatrizBResultado(){
         JLabel label = new JLabel("0.0");
+        label.setFont(new Font("Arial", 1, 25));
         this.jpMatrizBResultado.add(label);
         this.matrizBResutado.add(label);
     }
@@ -311,6 +398,16 @@ public class JanelaPrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jpPassos = new javax.swing.JPanel();
+        jButton3 = new javax.swing.JButton();
+        jpMatrizAPassos = new javax.swing.JPanel();
+        jpMatrizBPassos = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jpMatrizEscalonadaA = new javax.swing.JPanel();
+        jpMatrizEscalonadaB = new javax.swing.JPanel();
+        jPanel7 = new javax.swing.JPanel();
+        jpResultados = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -324,10 +421,123 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         jpMatrizBResultado = new javax.swing.JPanel();
         jpMatrizAResultado = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
+        jbPassos = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
+        jXCPassos = new org.jdesktop.swingx.JXCollapsiblePane();
+
+        jpPassos.setBackground(new java.awt.Color(255, 255, 255));
+
+        jButton3.setBackground(new java.awt.Color(30, 144, 255));
+        jButton3.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
+        jButton3.setForeground(new java.awt.Color(255, 255, 255));
+        jButton3.setText("Voltar");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jpMatrizAPassos.setBackground(new java.awt.Color(255, 255, 255));
+        jpMatrizAPassos.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 2, 0, 2, new java.awt.Color(0, 0, 0)));
+        jpMatrizAPassos.setMinimumSize(new java.awt.Dimension(100, 100));
+        jpMatrizAPassos.setLayout(new java.awt.GridLayout(2, 2, 4, 4));
+
+        jpMatrizBPassos.setBackground(new java.awt.Color(255, 255, 255));
+        jpMatrizBPassos.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 0, 2, new java.awt.Color(0, 0, 0)));
+        jpMatrizBPassos.setLayout(new java.awt.GridLayout(2, 1, 4, 4));
+
+        jLabel2.setFont(new java.awt.Font("Lucida Grande", 0, 16)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(153, 0, 0));
+        jLabel2.setText("1. Achar a Matriz Aumentada");
+
+        jLabel3.setFont(new java.awt.Font("Lucida Grande", 0, 16)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(153, 0, 0));
+        jLabel3.setText("2. Achar a Matriz diagonal Superior");
+
+        jpMatrizEscalonadaA.setBackground(new java.awt.Color(255, 255, 255));
+        jpMatrizEscalonadaA.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 2, 0, 2, new java.awt.Color(0, 0, 0)));
+        jpMatrizEscalonadaA.setMinimumSize(new java.awt.Dimension(100, 100));
+        jpMatrizEscalonadaA.setLayout(new java.awt.GridLayout(2, 2, 4, 4));
+
+        jpMatrizEscalonadaB.setBackground(new java.awt.Color(255, 255, 255));
+        jpMatrizEscalonadaB.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 0, 2, new java.awt.Color(0, 0, 0)));
+        jpMatrizEscalonadaB.setLayout(new java.awt.GridLayout(2, 1, 4, 4));
+
+        jPanel7.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(20, 144, 255), 2, true), "Resultados", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Lucida Grande", 0, 16), new java.awt.Color(30, 144, 255))); // NOI18N
+
+        jpResultados.setBackground(new java.awt.Color(255, 255, 255));
+        jpResultados.setLayout(new java.awt.GridLayout(1, 6, 0, 5));
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jpResultados, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(15, 15, 15))
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jpResultados, javax.swing.GroupLayout.DEFAULT_SIZE, 51, Short.MAX_VALUE)
+                .addGap(26, 26, 26))
+        );
+
+        javax.swing.GroupLayout jpPassosLayout = new javax.swing.GroupLayout(jpPassos);
+        jpPassos.setLayout(jpPassosLayout);
+        jpPassosLayout.setHorizontalGroup(
+            jpPassosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpPassosLayout.createSequentialGroup()
+                .addGroup(jpPassosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jpPassosLayout.createSequentialGroup()
+                        .addGap(32, 32, 32)
+                        .addGroup(jpPassosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jpPassosLayout.createSequentialGroup()
+                                .addGroup(jpPassosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2)
+                                    .addGroup(jpPassosLayout.createSequentialGroup()
+                                        .addComponent(jpMatrizAPassos, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jpMatrizBPassos, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(277, 277, 277)
+                                .addGroup(jpPassosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addGroup(jpPassosLayout.createSequentialGroup()
+                                        .addComponent(jpMatrizEscalonadaA, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jpMatrizEscalonadaB, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 16, Short.MAX_VALUE))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpPassosLayout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton3)))
+                .addContainerGap())
+        );
+        jpPassosLayout.setVerticalGroup(
+            jpPassosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpPassosLayout.createSequentialGroup()
+                .addGap(90, 90, 90)
+                .addGroup(jpPassosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel3))
+                .addGap(18, 18, 18)
+                .addGroup(jpPassosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jpMatrizEscalonadaB, javax.swing.GroupLayout.DEFAULT_SIZE, 112, Short.MAX_VALUE)
+                    .addComponent(jpMatrizEscalonadaA, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jpMatrizBPassos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jpMatrizAPassos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 443, Short.MAX_VALUE)
+                .addComponent(jButton3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(42, 42, 42))
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -427,15 +637,33 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(30, 144, 255)), "Ver Pass a Passo", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Lucida Grande", 0, 13), new java.awt.Color(30, 144, 255))); // NOI18N
         jPanel6.setForeground(new java.awt.Color(255, 255, 255));
 
+        jbPassos.setBackground(new java.awt.Color(30, 144, 255));
+        jbPassos.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
+        jbPassos.setForeground(new java.awt.Color(255, 255, 255));
+        jbPassos.setText("Ver Passo a Passo");
+        jbPassos.setEnabled(false);
+        jbPassos.setFocusCycleRoot(true);
+        jbPassos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbPassosActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGap(416, 416, 416)
+                .addComponent(jbPassos, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 370, Short.MAX_VALUE)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGap(129, 129, 129)
+                .addComponent(jbPassos, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(187, Short.MAX_VALUE))
         );
 
         jPanel5.setBackground(new java.awt.Color(255, 255, 255));
@@ -513,16 +741,17 @@ public class JanelaPrincipal extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jpEquacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 65, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(37, 37, 37))
         );
 
         jPanel3.add(jPanel2, java.awt.BorderLayout.CENTER);
 
         getContentPane().add(jPanel3, java.awt.BorderLayout.CENTER);
+        getContentPane().add(jXCPassos, java.awt.BorderLayout.PAGE_END);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -539,10 +768,26 @@ public class JanelaPrincipal extends javax.swing.JFrame {
        
         if(this.validarCampos()){
             this.getMatrizA();
-            this.setResultado();   
+            this.setResultado();
+            this.jbPassos.setEnabled(true);
         }
         
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jbPassosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbPassosActionPerformed
+        jXCPassos.setCollapsed(false);
+        this.addMatrizAPassos();
+        this.addMatrizBPassos();
+        
+        this.addMatrizEscalonadaA();
+        this.addMatrizEscalonadaB();
+        
+        this.adicionarResultados();
+    }//GEN-LAST:event_jbPassosActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        jXCPassos.setCollapsed(true);
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -581,21 +826,33 @@ public class JanelaPrincipal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private org.jdesktop.swingx.JXCollapsiblePane jXCPassos;
+    private javax.swing.JButton jbPassos;
     private javax.swing.JPanel jpEquacao;
     private javax.swing.JPanel jpIgualdade;
     private javax.swing.JPanel jpIgualdadeResultado;
     private javax.swing.JPanel jpMatrizA;
+    private javax.swing.JPanel jpMatrizAPassos;
     private javax.swing.JPanel jpMatrizAResultado;
     private javax.swing.JPanel jpMatrizB;
+    private javax.swing.JPanel jpMatrizBPassos;
     private javax.swing.JPanel jpMatrizBResultado;
+    private javax.swing.JPanel jpMatrizEscalonadaA;
+    private javax.swing.JPanel jpMatrizEscalonadaB;
+    private javax.swing.JPanel jpPassos;
+    private javax.swing.JPanel jpResultados;
     // End of variables declaration//GEN-END:variables
 }

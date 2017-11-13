@@ -6,6 +6,7 @@
 package modelo;
 
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,6 +23,8 @@ public class Gauss {
     private Vector<Double> matrizB;
     private Vector<Double> multiplicadores = new Vector<>();
     private int ordemMatriz;
+    public Passos passos = new Passos();
+    
     
     
     private Map<String, Double> resultados = new HashMap<>();
@@ -31,6 +34,8 @@ public class Gauss {
     public Gauss(Vector<Vector<Double>> matrizA, Vector<Double> matrizB){
         this.matrizA = matrizA;
         this.matrizB = matrizB;
+ 
+//        passos = new Passos(matrizA, matrizB);
     }
     
     
@@ -38,6 +43,8 @@ public class Gauss {
         
         this.comporMatriz(matrizAsLista, matrizB, ordemMatriz);
         this.imprimirMatriz();
+        
+//        passos = new Passos(matrizA, this.matrizB);
            
     }
     
@@ -83,7 +90,7 @@ public class Gauss {
      * @return 
      */
     private  Double getMultiplicador(int linha, int colunaPivot, double pivot){
-        return (matrizA.get(linha).get(colunaPivot))/pivot;
+        return this.arredondar(matrizA.get(linha).get(colunaPivot)/pivot);
     }
     
     
@@ -130,7 +137,7 @@ public class Gauss {
            colunaPivoteamento++;
            linhaPivot++; 
         }
-        
+        passos.setMatrizEscalonada(matrizA, matrizB);
         return this.matrizA;
     }
 
@@ -147,22 +154,33 @@ public class Gauss {
                 
                 if(coluna>=linha){
                     if(linha == coluna){
-                        this.resultados.put("X"+(linha+1), resultLinha/matrizA.get(linha).get(coluna));
+                        this.resultados.put("X"+(linha+1), this.arredondar(resultLinha/matrizA.get(linha).get(coluna)));
                         this.matrizB.set(linha, resultados.get("X"+(linha+1)));
                         break;
                     }
                     else
-                    resultLinha = resultLinha - (matrizA.get(linha).get(coluna) * matrizB.get(coluna));
-                    
+                    resultLinha = resultLinha - (matrizA.get(linha).get(coluna) * matrizB.get(coluna));    
                 }
             }
             
         }
+        
+//        passos.setResultados(resultados);
     }
     
     
     public Map<String,Double> getResultados(){
         return this.resultados;
     }
+    
+    
+    public double arredondar(double numero){
+        BigDecimal bd = new BigDecimal(numero);
+        bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
+        return bd.doubleValue();
+    }
+    
+    
+    
 
 }
