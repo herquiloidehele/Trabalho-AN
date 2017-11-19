@@ -7,11 +7,16 @@ package modelo;
 
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Vector;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import visao.Detalhes;
 
 /**
  *
@@ -21,9 +26,12 @@ public class Gauss {
     
     private Vector<Vector<Double>> matrizA;
     private Vector<Double> matrizB;
-    private Vector<Double> multiplicadores = new Vector<>();
+    private LinkedList<Double> multiplicadores = new LinkedList<Double>();
     private int ordemMatriz;
-    public Passos passos = new Passos();
+    public Detalhes detalhes;
+    
+          
+         
     
     
     
@@ -34,25 +42,33 @@ public class Gauss {
     public Gauss(Vector<Vector<Double>> matrizA, Vector<Double> matrizB){
         this.matrizA = matrizA;
         this.matrizB = matrizB;
- 
-//        passos = new Passos(matrizA, matrizB);
+       
+        imprimirMatriz("Matriz Aumentada");
+        
+       
+     }
+    
+    
+    public Gauss(Vector<Double> matrizAsLista , Vector<Double> matrizB, int ordemMatriz, Detalhes jpDetalhes){
+        this.ordemMatriz = ordemMatriz;
+        this.comporMatriz(matrizAsLista, matrizB, ordemMatriz);
+       
+        
+        this.setJPDetalhes(jpDetalhes);
+        this.detalhes.setOrderMatriz(this.ordemMatriz);
+        this.imprimirMatriz("Matriz Aumentada");
+//        
     }
     
     
-    public Gauss(Vector<Double> matrizAsLista , Vector<Double> matrizB, int ordemMatriz){
-        
-        this.comporMatriz(matrizAsLista, matrizB, ordemMatriz);
-        this.imprimirMatriz();
-        
-//        passos = new Passos(matrizA, this.matrizB);
-           
+    public void adicionarDetalhes(Detalhes detalhes){
+        this.detalhes = detalhes;
     }
     
     
     public void comporMatriz(Vector<Double> matrizAsLista , Vector<Double> matrizB, int ordemMatriz){
        
         this.matrizA = new Vector<>();
-        this.ordemMatriz = ordemMatriz;
         this.matrizB = matrizB;
         
         int cont = 0;
@@ -70,7 +86,11 @@ public class Gauss {
     /**
      * imprime todos elementos da matriz de forma formatada
      */
-    public void imprimirMatriz(){
+    public void imprimirMatriz(String operacao){
+
+
+//        passos.adicionarElementos(matrizA);
+        
         int indexMatrizB = 0;
         for(Vector linhas: matrizA){
             for(Object colunas:  linhas){
@@ -80,6 +100,9 @@ public class Gauss {
             System.out.println(" ");
             indexMatrizB++;
         }
+        System.out.println("\n\n");
+        
+         this.detalhes.adicionarConteudo(this.matrizA, this.matrizB, operacao);
     }
     
     
@@ -117,11 +140,12 @@ public class Gauss {
         
         
         for(int pivoteamento = 0; pivoteamento<this.matrizA.size()-1; pivoteamento++){
-        
+            double multiplicadorExperno = 0;
             for(int linha = pivoteamento+1; linha<matrizA.size(); linha++){
                 double pivot = this.getPivot(colunaPivoteamento);
                 multiplicador = this.getMultiplicador(linha, colunaPivoteamento, pivot);
-
+                 multiplicadorExperno = multiplicador;
+                 multiplicadores.add(multiplicador);
                 
                 for(int coluna = colunaPivoteamento; coluna<matrizA.get(linha).size(); coluna++){
 
@@ -133,11 +157,15 @@ public class Gauss {
                     
                 }
                 matrizB.set(linha, matrizB.get(linha) - multiplicador*this.matrizB.get(linhaPivot));
+                
+                
+                
+                imprimirMatriz("L"+(linha+1) +"="+  "L"+(linha+1) +" - ("+ multiplicadores.removeFirst() +" * "+ "L"+(linhaPivot+1)+")");
+               
             }
            colunaPivoteamento++;
            linhaPivot++; 
         }
-        passos.setMatrizEscalonada(matrizA, matrizB);
         return this.matrizA;
     }
 
@@ -164,8 +192,7 @@ public class Gauss {
             }
             
         }
-        
-//        passos.setResultados(resultados);
+        imprimirMatriz("Aplicando Retrosubstituicao");  
     }
     
     
@@ -181,6 +208,64 @@ public class Gauss {
     }
     
     
+    
+    public void adicionarCobteudo(JPanel matrizA, JPanel matrizB){
+        for (int linha = 0; linha < this.ordemMatriz; linha++){
+            matrizB.add(new JLabel(String.valueOf(this.matrizB.get(linha))));
+//            matrizB.validate();
+            for(int coluna =0; coluna< this.ordemMatriz; coluna++){
+                matrizA.add(new JLabel(String.valueOf(this.matrizA.get(linha).get(coluna))));
+            }
+        }
+        
+    }
+    
+    
+    public void setJPDetalhes(Detalhes detalhes){
+        this.detalhes = detalhes;
+    }
+    
+    
+    
+//       public static void main(String[] args) {
+//    
+//        int cont  = 0;
+//        double [] elementos = {1,4,1, 2, 4, 2, 1, 3, 2};
+//        Vector<Double> matrizB =  new Vector<>(Arrays.asList(3.0, 6.0, 3.0));
+//        Vector<Vector<Double>> matrizA = new Vector<>();
+//        
+//        
+//        for (int linha = 0; linha<matrizB.size(); linha++){
+//            matrizA.add(new Vector<Double>());
+//            for(int coluna =0; coluna<matrizB.size(); coluna++){
+//                matrizA.get(linha).add(elementos[cont++]);
+//            }
+//        }
+//        Gauss gaus = new Gauss(matrizA, matrizB);
+//        gaus.escalonar();
+////        gaus.retrosubstituicao();
+//
+//        System.out.println("\n Depois da retrosubstituicao");
+//        for(Vector<Vector<Double>> matriz_a: gaus.passos.unmodifiable){
+//            for(Vector<Double> linha : matriz_a ){
+//                for(double coluna: linha)
+//                    System.out.print("  "+ coluna+ "  ");
+//                System.out.println(" ");
+//            }
+//            System.out.println("");   
+//        }
+//
+//        
+//        
+//    }
+
+    public Vector<Vector<Double>> getMatrizA() {
+        return matrizA;
+    }
+
+    public Vector<Double> getMatrizB() {
+        return matrizB;
+    }
     
 
 }
