@@ -158,7 +158,7 @@ public class Gauss {
                 
                 
                 
-                imprimirMatriz("L"+(linha+1) +"="+  "L"+(linha+1) +" - ("+ multiplicadores.removeFirst() +" * "+ "L"+(linhaPivot+1)+")");
+                imprimirMatriz("Linha"+(linha+1) +"="+  "Linha"+(linha+1) +" - ("+ multiplicadores.removeFirst() +" * "+ "Llinha"+(linhaPivot+1)+")");
                
             }
            colunaPivoteamento++;
@@ -200,9 +200,10 @@ public class Gauss {
     
     
     public double arredondar(double numero){
-        BigDecimal bd = new BigDecimal(numero);
-        bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
-        return bd.doubleValue();
+//        BigDecimal bd = new BigDecimal(numero);
+//        bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
+//        return bd.doubleValue();
+    return numero;
     }
     
     
@@ -225,38 +226,6 @@ public class Gauss {
     
     
     
-//       public static void main(String[] args) {
-//    
-//        int cont  = 0;
-//        double [] elementos = {1,4,1, 2, 4, 2, 1, 3, 2};
-//        Vector<Double> matrizB =  new Vector<>(Arrays.asList(3.0, 6.0, 3.0));
-//        Vector<Vector<Double>> matrizA = new Vector<>();
-//        
-//        
-//        for (int linha = 0; linha<matrizB.size(); linha++){
-//            matrizA.add(new Vector<Double>());
-//            for(int coluna =0; coluna<matrizB.size(); coluna++){
-//                matrizA.get(linha).add(elementos[cont++]);
-//            }
-//        }
-//        Gauss gaus = new Gauss(matrizA, matrizB);
-//        gaus.escalonar();
-////        gaus.retrosubstituicao();
-//
-//        System.out.println("\n Depois da retrosubstituicao");
-//        for(Vector<Vector<Double>> matriz_a: gaus.passos.unmodifiable){
-//            for(Vector<Double> linha : matriz_a ){
-//                for(double coluna: linha)
-//                    System.out.print("  "+ coluna+ "  ");
-//                System.out.println(" ");
-//            }
-//            System.out.println("");   
-//        }
-//
-//        
-//        
-//    }
-
     public Vector<Vector<Double>> getMatrizA() {
         return matrizA;
     }
